@@ -15,7 +15,14 @@
     </head>
     <body>
         {% block body %}
-            YOOOOO
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-1">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbar-collapsable">
+                    <a class="nav-link text-black-50" href="{{ path('app_login') }}">Log In</a>
+                    <a href="#" class="btn btn-dark">Sign up</a>
+                </div>
+            </div>
+        </nav>
         {% endblock %}
     </body>
 </html>

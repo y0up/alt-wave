@@ -52,6 +52,12 @@ final class UserFactory extends ModelFactory
             'username' => self::faker()->userName(),
             'dateOfBirth' => self::faker()->date($format = 'Y-m-d', $max = 'now'),
             'description' => self::faker()->paragraph($nbSentences = 3, $variableNbSentences = true),
+            'disponibility' => self::faker()->boolean(50),
+            'disponibilityDesc' => self::faker()->realText(50),
+            'createdAt' => self::faker()->dateTimeBetween('-1000 days', '-100 days'), // TODO add DATETIME ORM type manually
+            'updatedAt' => self::faker()->dateTimeBetween('-100 days', '-1 days'), // TODO add DATETIME ORM type manually
+            'domains' => DomainFactory::randomRange(1,3),
+            'tags' => TagFactory::randomRange(1,10),
         ];
     }
 

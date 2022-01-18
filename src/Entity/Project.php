@@ -44,12 +44,16 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: step::class, orphanRemoval: true)]
     private $steps;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: UserProject::class)]
+    private $userProjects;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->needContents = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->steps = new ArrayCollection();
+        $this->userProjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,6 +211,36 @@ class Project
             // set the owning side to null (unless already changed)
             if ($step->getProject() === $this) {
                 $step->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserProject[]
+     */
+    public function getUserProjects(): Collection
+    {
+        return $this->userProjects;
+    }
+
+    public function addUserProject(UserProject $userProject): self
+    {
+        if (!$this->userProjects->contains($userProject)) {
+            $this->userProjects[] = $userProject;
+            $userProject->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProject(UserProject $userProject): self
+    {
+        if ($this->userProjects->removeElement($userProject)) {
+            // set the owning side to null (unless already changed)
+            if ($userProject->getProject() === $this) {
+                $userProject->setProject(null);
             }
         }
 

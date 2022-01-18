@@ -75,6 +75,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: tag::class, inversedBy: 'users')]
     private $tags;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProject::class)]
+    private $userProjects;
+
     public function __construct()
     {
         $this->followUser = new ArrayCollection();
@@ -82,6 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->domains = new ArrayCollection();
         $this->socialLinks = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->userProjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -418,6 +422,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeTag(tag $tag): self
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserProject[]
+     */
+    public function getUserProjects(): Collection
+    {
+        return $this->userProjects;
+    }
+
+    public function addUserProject(UserProject $userProject): self
+    {
+        if (!$this->userProjects->contains($userProject)) {
+            $this->userProjects[] = $userProject;
+            $userProject->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProject(UserProject $userProject): self
+    {
+        if ($this->userProjects->removeElement($userProject)) {
+            // set the owning side to null (unless already changed)
+            if ($userProject->getUser() === $this) {
+                $userProject->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use App\Repository\ProjectRepository;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -21,6 +22,10 @@ class Project
 
     #[ORM\Column(type: 'boolean')]
     private $featured;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Gedmo\Slug(fields: ['name'])]
+    private $slug;
 
     public function getId(): ?int
     {
@@ -59,6 +64,18 @@ class Project
     public function setFeatured(bool $featured): self
     {
         $this->featured = $featured;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

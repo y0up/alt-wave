@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\StepRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\StepRepository;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: StepRepository::class)]
 class Step
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

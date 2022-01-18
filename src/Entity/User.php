@@ -44,6 +44,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'text')]
     private $description;
 
+    #[ORM\Column(type: 'boolean')]
+    private $disponibility;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $disponibilityDesc;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -216,6 +222,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getDisponibility(): ?bool
+    {
+        return $this->disponibility;
+    }
+
+    public function setDisponibility(bool $disponibility): self
+    {
+        $this->disponibility = $disponibility;
+
+        return $this;
+    }
+
+    public function getDisponibilityDesc(): ?string
+    {
+        return $this->disponibilityDesc;
+    }
+
+    public function setDisponibilityDesc(?string $disponibilityDesc): self
+    {
+        $this->disponibilityDesc = $disponibilityDesc;
 
         return $this;
     }

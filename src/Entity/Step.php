@@ -22,6 +22,10 @@ class Step
     #[ORM\Column(type: 'boolean')]
     private $resolved;
 
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'steps')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $project;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class Step
     public function setResolved(bool $resolved): self
     {
         $this->resolved = $resolved;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

@@ -19,6 +19,14 @@ class NeedContent
     #[ORM\Column(type: 'boolean')]
     private $resolved;
 
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'needContents')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $project;
+
+    #[ORM\ManyToOne(targetEntity: Need::class, inversedBy: 'needContents')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $need;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +52,30 @@ class NeedContent
     public function setResolved(bool $resolved): self
     {
         $this->resolved = $resolved;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getNeed(): ?Need
+    {
+        return $this->need;
+    }
+
+    public function setNeed(?Need $need): self
+    {
+        $this->need = $need;
 
         return $this;
     }

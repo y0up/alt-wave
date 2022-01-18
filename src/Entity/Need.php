@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\NeedRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NeedRepository::class)]
@@ -18,6 +20,14 @@ class Need
 
     #[ORM\Column(type: 'string', length: 255)]
     private $description;
+
+    #[ORM\OneToMany(mappedBy: 'need', targetEntity: needcontent::class, orphanRemoval: true)]
+    private $needContents;
+
+    public function __construct()
+    {
+        $this->needContents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,6 +54,36 @@ class Need
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|needcontent[]
+     */
+    public function getNeedContents(): Collection
+    {
+        return $this->needContents;
+    }
+
+    public function addNeedContent(needcontent $needContent): self
+    {
+        if (!$this->needContents->contains($needContent)) {
+            $this->needContents[] = $needContent;
+            $needContent->setNeed($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNeedContent(needcontent $needContent): self
+    {
+        if ($this->needContents->removeElement($needContent)) {
+            // set the owning side to null (unless already changed)
+            if ($needContent->getNeed() === $this) {
+                $needContent->setNeed(null);
+            }
+        }
 
         return $this;
     }

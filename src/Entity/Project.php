@@ -32,16 +32,6 @@ class Project
     #[Gedmo\Slug(fields: ['name'])]
     private $slug;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'follow')]
-    private $followers;
-
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'work')]
-    private $workers;
-
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'projects')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $autor;
-
     #[ORM\ManyToMany(targetEntity: tag::class, inversedBy: 'projects')]
     private $tags;
 
@@ -56,8 +46,6 @@ class Project
 
     public function __construct()
     {
-        $this->followers = new ArrayCollection();
-        $this->workers = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->needContents = new ArrayCollection();
         $this->categories = new ArrayCollection();
@@ -113,72 +101,6 @@ class Project
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getFollowers(): Collection
-    {
-        return $this->followers;
-    }
-
-    public function addFollower(User $follower): self
-    {
-        if (!$this->followers->contains($follower)) {
-            $this->followers[] = $follower;
-            $follower->addFollowProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFollower(User $follower): self
-    {
-        if ($this->followers->removeElement($follower)) {
-            $follower->removeFollowProject($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getWorkers(): Collection
-    {
-        return $this->workers;
-    }
-
-    public function addWorker(User $worker): self
-    {
-        if (!$this->workers->contains($worker)) {
-            $this->workers[] = $worker;
-            $worker->addWork($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWorker(User $worker): self
-    {
-        if ($this->workers->removeElement($worker)) {
-            $worker->removeWork($this);
-        }
-
-        return $this;
-    }
-
-    public function getAutor(): ?User
-    {
-        return $this->autor;
-    }
-
-    public function setAutor(?User $autor): self
-    {
-        $this->autor = $autor;
 
         return $this;
     }

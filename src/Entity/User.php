@@ -60,17 +60,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Gedmo\Slug(fields: ['username'])]
     private $slug;
 
-    #[ORM\ManyToMany(targetEntity: project::class, inversedBy: 'followers')]
-    private $followProject;
-
     #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'followers')]
     private $followUser;
-
-    #[ORM\ManyToMany(targetEntity: project::class, inversedBy: 'workers')]
-    private $work;
-
-    #[ORM\OneToMany(mappedBy: 'autor', targetEntity: project::class, orphanRemoval: true)]
-    private $projects;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'followUser')]
     private $followers;
@@ -86,10 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->followProject = new ArrayCollection();
         $this->followUser = new ArrayCollection();
-        $this->work = new ArrayCollection();
-        $this->projects = new ArrayCollection();
         $this->followers = new ArrayCollection();
         $this->domains = new ArrayCollection();
         $this->socialLinks = new ArrayCollection();
@@ -306,30 +294,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|project[]
-     */
-    public function getFollowProject(): Collection
-    {
-        return $this->followProject;
-    }
-
-    public function addFollowProject(project $followProject): self
-    {
-        if (!$this->followProject->contains($followProject)) {
-            $this->followProject[] = $followProject;
-        }
-
-        return $this;
-    }
-
-    public function removeFollowProject(project $followProject): self
-    {
-        $this->followProject->removeElement($followProject);
-
-        return $this;
-    }
-
-    /**
      * @return Collection|user[]
      */
     public function getFollowUser(): Collection
@@ -349,60 +313,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeFollowUser(user $followUser): self
     {
         $this->followUser->removeElement($followUser);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|project[]
-     */
-    public function getWork(): Collection
-    {
-        return $this->work;
-    }
-
-    public function addWork(project $work): self
-    {
-        if (!$this->work->contains($work)) {
-            $this->work[] = $work;
-        }
-
-        return $this;
-    }
-
-    public function removeWork(project $work): self
-    {
-        $this->work->removeElement($work);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|project[]
-     */
-    public function getProjects(): Collection
-    {
-        return $this->projects;
-    }
-
-    public function addProject(project $project): self
-    {
-        if (!$this->projects->contains($project)) {
-            $this->projects[] = $project;
-            $project->setAutor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProject(project $project): self
-    {
-        if ($this->projects->removeElement($project)) {
-            // set the owning side to null (unless already changed)
-            if ($project->getAutor() === $this) {
-                $project->setAutor(null);
-            }
-        }
 
         return $this;
     }

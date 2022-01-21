@@ -30,7 +30,11 @@ class AppFixtures extends Fixture
         
         TagFactory::createMany(100);
         
-        UserFactory::createOne(['email' => 'admin@example.com']);
+        UserFactory::createOne([
+                'email' => 'admin@example.com',
+                'roles' => ['ROLE_ADMIN']
+        ]);
+
         UserFactory::createMany(30);
         
         SocialLinkFactory::createMany(10);

@@ -8,9 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
+/**
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -60,23 +64,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Gedmo\Slug(fields: ['username'])]
     private $slug;
 
-    #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'followers')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'followers')]
     private $followUser;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'followUser')]
     private $followers;
 
-    #[ORM\ManyToMany(targetEntity: domain::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Domain::class, inversedBy: 'users')]
     private $domains;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: sociallink::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: SocialLink::class, orphanRemoval: true)]
     private $socialLinks;
 
-    #[ORM\ManyToMany(targetEntity: tag::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'users')]
     private $tags;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProject::class)]
     private $userProjects;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
 
     public function __construct()
     {
@@ -452,6 +459,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $userProject->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

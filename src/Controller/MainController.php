@@ -9,11 +9,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(): Response
+    public function home(): Response
     {        
 
         return $this->render('base.html.twig', [
         ]);
+        
+    }
+
+    #[Route('/{slug<^((?!login|register|verify).)*$>}', name: '{slug}' )]
+    public function show($slug): Response
+    {        
+
+        return new Response(sprintf(
+            'Future page to show a project or a profile "%s"!',
+            $slug
+        ));
         
     }
 }

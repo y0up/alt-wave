@@ -58,6 +58,7 @@ final class UserFactory extends ModelFactory
             'updatedAt' => self::faker()->dateTimeBetween('-100 days', '-1 days'), // TODO add DATETIME ORM type manually
             'domains' => DomainFactory::randomRange(1,3),
             'tags' => TagFactory::randomRange(1,10),
+            'isVerified' => true,
         ];
     }
 

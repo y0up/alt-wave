@@ -32,16 +32,16 @@ class Project
     #[Gedmo\Slug(fields: ['name'])]
     private $slug;
 
-    #[ORM\ManyToMany(targetEntity: tag::class, inversedBy: 'projects')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'projects')]
     private $tags;
 
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: needcontent::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: NeedContent::class, orphanRemoval: true)]
     private $needContents;
 
-    #[ORM\ManyToMany(targetEntity: category::class, inversedBy: 'projects')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'projects')]
     private $categories;
 
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: step::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Step::class, orphanRemoval: true)]
     private $steps;
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: UserProject::class)]
@@ -164,14 +164,14 @@ class Project
     }
 
     /**
-     * @return Collection|category[]
+     * @return Collection|Category[]
      */
     public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function addCategory(category $category): self
+    public function addCategory(Category $category): self
     {
         if (!$this->categories->contains($category)) {
             $this->categories[] = $category;
@@ -188,7 +188,7 @@ class Project
     }
 
     /**
-     * @return Collection|step[]
+     * @return Collection|Step[]
      */
     public function getSteps(): Collection
     {
@@ -205,7 +205,7 @@ class Project
         return $this;
     }
 
-    public function removeStep(step $step): self
+    public function removeStep(Step $step): self
     {
         if ($this->steps->removeElement($step)) {
             // set the owning side to null (unless already changed)

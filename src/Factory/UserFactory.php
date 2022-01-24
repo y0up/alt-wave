@@ -50,7 +50,6 @@ final class UserFactory extends ModelFactory
             'firstname' => self::faker()->firstName(),
             'lastname' => self::faker()->lastName(),
             'username' => self::faker()->userName(),
-            'dateOfBirth' => self::faker()->date($format = 'Y-m-d', $max = 'now'),
             'description' => self::faker()->paragraph($nbSentences = 3, $variableNbSentences = true),
             'disponibility' => self::faker()->boolean(50),
             'disponibilityDesc' => self::faker()->realText(50),

@@ -23,8 +23,6 @@ class RegistrationController extends AbstractController
             Request $request,
             UserPasswordHasherInterface $userPasswordHasher,
             EntityManagerInterface $entityManager,
-            UserAuthenticatorInterface $userAuthenticator,
-            FormLoginAuthenticator $formLoginAuthenticator,
             VerifyEmailHelperInterface $verifyEmailHelper
         ): Response
     {
@@ -40,6 +38,12 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            if ($form->get('userName')->getData() == null) {
+                $username = '@'.($form->get('firstName')->getData()[0]).($form->get('lastName')->getData());
+                $user->setUsername(preg_replace("/[^A-Za-z0-9 ]/", '', $username));
+            }
+
 
             $entityManager->persist($user);
             $entityManager->flush();

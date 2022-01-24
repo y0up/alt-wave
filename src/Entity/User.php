@@ -45,9 +45,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private $username;
 
-    #[ORM\Column(type: 'string' , length: 255)]
-    private $dateOfBirth;
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $phoneNumber;
 
@@ -55,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $description;
 
     #[ORM\Column(type: 'boolean')]
-    private $disponibility;
+    private $disponibility = false;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $disponibilityDesc;
@@ -208,18 +205,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
-
-        return $this;
-    }
-
-    public function getDateOfBirth(): ?string
-    {
-        return $this->dateOfBirth;
-    }
-
-    public function setDateOfBirth(string $dateOfBirth): self
-    {
-        $this->dateOfBirth = $dateOfBirth;
 
         return $this;
     }

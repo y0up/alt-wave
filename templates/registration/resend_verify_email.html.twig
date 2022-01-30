@@ -9,7 +9,25 @@
                 A verification email was sent - please click it to enable your
                 account before logging in.
             </p>
-            <a href="#" class="button is-primary">Re-send Email</a>
+            <form method="post" class="">
+
+                <div class="field">
+                    <label for="inputEmail" class="label">Email</label>
+                    <div class="control">
+                        <input type="email" name="email" id="inputEmail" class="input" required autofocus>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-success" type="submit">
+                            re-send
+                        </button>
+                    </div>
+                </div>
+
+                {# <a href="{{ path('app_verify_resend_email', {resendEmail : true}) }}" class="button is-primary">Re-send Email</a> #}
+            </form>
         </div>
     </div>
 </div>

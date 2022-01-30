@@ -105,8 +105,31 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/resend', name: 'app_verify_resend_email')]
-    public function resendVerifyEmail()
+    public function resendVerifyEmail(Request $request, UserRepository $userRepo, VerifyEmailHelperInterface $verifyEmailHelper, MailerInterface $mailer)
     {
+
+        
+        if ($request->isMethod('POST')) {
+
+            $user = $userRepo->findOneBy(['email' => $request->get('email')]);
+    
+            $signatureComponents = $verifyEmailHelper->generateSignature(
+                'app_verify_email',
+                $user->getId(),
+                $user->getEmail(),
+                ['id' => $user->getId()]
+            );
+            $email = (new Email())
+                ->from('altwave@example.com')
+                ->to($user->getEmail())
+                ->subject('verify your account!')
+                ->text('Confirm your email at: '.$signatureComponents->getSignedUrl());
+
+            $mailer->send($email);        
+        
+        }
+
+
         return $this->render('registration/resend_verify_email.html.twig');
     }
 }

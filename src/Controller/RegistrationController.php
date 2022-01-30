@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -23,7 +25,8 @@ class RegistrationController extends AbstractController
             Request $request,
             UserPasswordHasherInterface $userPasswordHasher,
             EntityManagerInterface $entityManager,
-            VerifyEmailHelperInterface $verifyEmailHelper
+            VerifyEmailHelperInterface $verifyEmailHelper,
+            MailerInterface $mailer
         ): Response
     {
         $user = new User();
@@ -56,7 +59,15 @@ class RegistrationController extends AbstractController
             );
 
             // TODO: in a real app, send this as an email!
-            $this->addFlash('success', 'Confirm your email at: '.$signatureComponents->getSignedUrl());
+            $email = (new Email())
+                ->from('altwave@example.com')
+                ->to($user->getEmail())
+                ->subject('verify your account!')
+                ->text('Confirm your email at: '.$signatureComponents->getSignedUrl());
+
+            $mailer->send($email);
+
+            $this->addFlash('success', 'A verification email was sent - please click it to enable your account before logging in.');
 
             return $this->redirectToRoute('home');
         }

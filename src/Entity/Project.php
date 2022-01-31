@@ -134,14 +134,14 @@ class Project
     }
 
     /**
-     * @return Collection|needcontent[]
+     * @return Collection|NeedContent[]
      */
     public function getNeedContents(): Collection
     {
         return $this->needContents;
     }
 
-    public function addNeedContent(needcontent $needContent): self
+    public function addNeedContent(NeedContent $needContent): self
     {
         if (!$this->needContents->contains($needContent)) {
             $this->needContents[] = $needContent;
@@ -151,7 +151,7 @@ class Project
         return $this;
     }
 
-    public function removeNeedContent(needcontent $needContent): self
+    public function removeNeedContent(NeedContent $needContent): self
     {
         if ($this->needContents->removeElement($needContent)) {
             // set the owning side to null (unless already changed)

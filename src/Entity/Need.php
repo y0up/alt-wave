@@ -21,7 +21,7 @@ class Need
     #[ORM\Column(type: 'string', length: 255)]
     private $description;
 
-    #[ORM\OneToMany(mappedBy: 'need', targetEntity: needcontent::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'need', targetEntity: NeedContent::class, orphanRemoval: true)]
     private $needContents;
 
     public function __construct()
@@ -59,14 +59,14 @@ class Need
     }
 
     /**
-     * @return Collection|needcontent[]
+     * @return Collection|NeedContent[]
      */
     public function getNeedContents(): Collection
     {
         return $this->needContents;
     }
 
-    public function addNeedContent(needcontent $needContent): self
+    public function addNeedContent(NeedContent $needContent): self
     {
         if (!$this->needContents->contains($needContent)) {
             $this->needContents[] = $needContent;
@@ -76,7 +76,7 @@ class Need
         return $this;
     }
 
-    public function removeNeedContent(needcontent $needContent): self
+    public function removeNeedContent(NeedContent $needContent): self
     {
         if ($this->needContents->removeElement($needContent)) {
             // set the owning side to null (unless already changed)

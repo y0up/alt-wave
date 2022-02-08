@@ -46,6 +46,7 @@ final class ProjectFactory extends ModelFactory
             'updatedAt' => self::faker()->dateTimeBetween('-100 days', '-1 days'), // TODO add DATETIME ORM type manually
             'tags' => TagFactory::randomRange(1,10),
             'categories' => CategoryFactory::randomRange(1,3),
+            'askForHelp' => false,
         ];
     }
 

@@ -1,0 +1,41 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block page_title %}Demande d'aide{% endblock %}
+{% block content_title %}
+    Demandes D'aide: {{ projects|length}}
+{% endblock %}
+
+{% block page_actions %}
+{% endblock %}
+
+{% block main %}
+
+
+
+{% for project in projects %}
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="https://bulma.io/images/placeholders/1280x960.png" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{project.name}}</h5>
+          <p class="card-text"><small class="text-muted">@
+            {% for userProject in project.userProjects %}
+                {% if userProject.autor == true %}
+                    {{userProject.user}}
+                {% endif %}
+            {% endfor %}  
+            </small></p>
+          <p class="card-text">{{ project.description}}</p>
+          <p class="card-text"><small class="text-muted">{{project.createdAt|date('d-m-Y')}}</small></p>
+          {% for tag in project.tags %}
+            <a><small class="text-muted">#{{tag.name}}</small></a>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}

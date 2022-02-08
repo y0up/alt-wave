@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
+use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,8 @@ class RegistrationController extends AbstractController
             UserPasswordHasherInterface $userPasswordHasher,
             EntityManagerInterface $entityManager,
             VerifyEmailHelperInterface $verifyEmailHelper,
-            MailerInterface $mailer
+            MailerInterface $mailer,
+            ImageUploader $imageUploader
         ): Response
     {
         $user = new User();
@@ -45,6 +47,12 @@ class RegistrationController extends AbstractController
             if ($form->get('userName')->getData() == null) {
                 $username = '@'.($form->get('firstName')->getData()[0]).($form->get('lastName')->getData());
                 $user->setUsername(preg_replace("/[^A-Za-z0-9 ]/", '', $username));
+            }
+
+            $avatarFile = $form->get('avatar')->getData();
+            if ($avatarFile) {
+                $avatarFileName = $imageUploader->upload($avatarFile);
+                $user->setAvatar($avatarFileName);
             }
 
 

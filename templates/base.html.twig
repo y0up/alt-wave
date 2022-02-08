@@ -47,6 +47,9 @@
     {% for flash in app.flashes('error') %}
       <div class="notification is-danger">{{ flash }}</div>
     {% endfor %}
+
+    <img src="/uploads/images/{{ user.avatar }}" alt="">
+
     {% endblock %}
   </body>
 </html>

@@ -26,6 +26,11 @@ class Social
         $this->socialLinks = new ArrayCollection();
     }
 
+    function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

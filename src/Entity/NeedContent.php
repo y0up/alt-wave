@@ -32,6 +32,11 @@ class NeedContent
         return $this->id;
     }
 
+    function __toString()
+    {
+        return $this->name;
+    }
+
     public function getName(): ?string
     {
         return $this->name;

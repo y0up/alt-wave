@@ -29,6 +29,11 @@ class Step
     #[ORM\JoinColumn(nullable: false)]
     private $project;
 
+    function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

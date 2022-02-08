@@ -92,6 +92,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userProjects = new ArrayCollection();
     }
 
+    function __toString()
+    {
+        return $this->username;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -24,6 +24,11 @@ class SocialLink
     #[ORM\JoinColumn(nullable: false)]
     private $social;
 
+    function __toString()
+    {
+        return $this->link;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -47,6 +47,9 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: UserProject::class)]
     private $userProjects;
 
+    #[ORM\Column(type: 'boolean')]
+    private $askForHelp = false;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -54,6 +57,11 @@ class Project
         $this->categories = new ArrayCollection();
         $this->steps = new ArrayCollection();
         $this->userProjects = new ArrayCollection();
+    }
+
+    function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -246,4 +254,17 @@ class Project
 
         return $this;
     }
+
+    public function getAskForHelp(): ?bool
+    {
+        return $this->askForHelp;
+    }
+
+    public function setAskForHelp(bool $askForHelp): self
+    {
+        $this->askForHelp = $askForHelp;
+
+        return $this;
+    }
+
 }

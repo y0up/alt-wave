@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{user.username}}{% endblock %}
+
+{% block body %}
+
+<div class="card">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+          </figure>
+        </div>
+        <div class="media-content">
+            {% if user.disponibility == true %}
+                <p class="has-text-success">Disponible</p>
+            {% else %}
+                <p class="has-text-danger">Non Disponible</p>
+            {% endif %}
+          <p class="title is-4">@{{user.username}}</p>
+          <p class="subtitle is-6">
+              {% for domain in user.domains %}
+                <a>{{domain.name}} </a>
+              {% endfor %} </p>
+        </div>
+      </div>
+  
+      <div class="content">
+        {{user.description}}
+        
+
+        {% for tag in user.tags %}
+        <a href="#">#{{tag.name}}</a>
+            
+        {% endfor %}
+        <br>
+        <p>{{user.email}}</p>
+        <br>
+        {% if user.phoneNumber %}
+            <p>{{user.phoneNumber}}</p>
+        {% endif %}
+
+        <div>
+            {% for socialLink in user.socialLinks %}
+                {{socialLink.name}}
+                {{socialLink.social.name}}
+            {% endfor %}
+        </div>
+
+        <div class="buttons">
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and user.id == currentUser.id %}
+                <button class="button is-primary" disabled>SUIVI</button>
+            {% elseif is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <button class="button is-primary" >+ SUIVRE</button>
+            {% else %}
+                <button class="button is-primary" disabled>+ SUIVRE</button>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    Mes projets
+    {% for project in user.userProjects %}
+      {% if project.autor == true %}
+      <div class="card">
+        <div class="card-image">
+          <figure class="image is-4by3">
+            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+          </figure>
+        </div>
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4">{{project.project.name}}</p>
+              <p class="subtitle is-6"> {% for categorie in project.project.categories %}
+                {{categorie.name}} 
+              {% endfor %} </p>
+              {% for tag in project.project.tags %}
+              <a class="is-7 is-italic has-text-weight-light ">
+                #{{tag.name}} 
+              </a>  
+              {% endfor %}
+            </div>
+          </div>
+      
+          <div class="content">
+            {{project.project.description}} <a>@bulmaio</a>.
+            <a href="#">#css</a> <a href="#">#responsive</a>
+            <br>
+            Etape en cours
+            <p>
+              {% for step in project.project.steps %}
+                {% if not step.resolved %}
+                  
+                {% endif %}
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+{% endblock %}

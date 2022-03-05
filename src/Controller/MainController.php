@@ -2,6 +2,8 @@
 // src/Controller/MainController.php
 namespace App\Controller;
 
+use App\Repository\ProjectRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,24 +26,23 @@ class MainController extends AbstractController
     }
 
     #[Route('/{slug<^((?!login|register|verify).)*$>}', name: '{slug}' )]
-    public function show($slug, MailerInterface $mailer): Response
+    public function show($slug, UserRepository $userRepo, ProjectRepository $projectRepo): Response
     {        
 
-        $email = (new Email())
-                ->from('from@example.com')
-                ->to('to@example.com')
-                ->subject('verify your account!')
-                ->text('tu es sur la page de '.$slug);
-        
-        try{
-            $mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            dd($e);
+        $currentUser = $this->getUser();
+        $user = $userRepo->findOneBy(['slug' => $slug]);
+
+        if ($user) {
+            return $this->render('main/profile.html.twig', [
+                'user' => $user,
+                'currentUser' => $currentUser,
+            ]);
         }
-        return new Response(sprintf(
-            'Future page to show a project or a profile "%s"!',
-            $slug
-        ));
+        if ($projectRepo->findOneBy(['name' => $slug])) {
+            dd('page de projet');
+        }
         
     }
+
+
 }
